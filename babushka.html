@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bistro Babushka</title>
+
+    <style>
+      main {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+      img {
+        max-width: 100%;
+      }
+      article {
+        border: 1px solid black;
+        padding: 10px;
+        margin: 10px;
+      }
+
+      .valgt {
+        background-color: cyan;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Alle</h1>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+      <button data-kategori="alle" class="valgt">Alle</button>
+      <button data-kategori="forretter">Forretter</button>
+      <button data-kategori="hovedretter">Hovedretter</button>
+      <button data-kategori="desserter">Desserter</button>
+      <button data-kategori="sideorders">Sideorders</button>
+      <button data-kategori="drikkevarer">Drikkevarer</button>
+    </nav>
+
+    <!-- Præsentation af hver ret med billed, titel, pris og tekst. -->
+    <main>
+      <section></section>
+      <!-- Alle medlemmerne og deres individuelle articles med informationer -->
+      <template>
+        <article>
+          <img src="" alt="" />
+          <h2 class="navn"></h2>
+          <h3 class="pris"></h3>
+          <p class="txt"></p>
+        </article>
+      </template>
+    </main>
+
+    <!-- Javascript -->
+    <script>
+      const header = document.querySelector('header h1');
+      const container = document.querySelector('section');
+      const temp = document.querySelector('template');
+
+      const url = 'https://babushka-dd8a.restdb.io/rest/menu';
+      const key = '600ec2fb1346a1524ff12de4';
+
+      let retter;
+      let filter = 'alle';
+      const filterknapper = document.querySelectorAll('nav button');
+
+      const myHeaders = {
+        headers: {
+          'x-apikey': key,
+        },
+      };
+
+      document.addEventListener('DOMContentLoaded', start);
+
+      //første funktion der kaldes efter dom er loaded
+
+      function start() {
+        filterknapper.forEach((knap) => {
+          knap.addEventListener('click', setFilter);
+        });
+        hentData();
+      }
+
+      function setFilter() {
+        filter = this.dataset.kategori;
+        document.querySelector('.valgt').classList.remove('valgt'); //fjern klassen valgt fra knappen
+        this.classList.add('valgt'); //Marker den knap der klikkes på med klassen valgt
+        vis();
+        header.textContent = this.textContent;
+      }
+
+      async function hentData() {
+        const JSONData = await fetch(url, myHeaders);
+        retter = await JSONData.json();
+        console.log(retter);
+        vis();
+      }
+
+      const main = document.querySelector('main');
+      const template = document.querySelector('template').content;
+
+      function vis() {
+        console.log(retter);
+        main.innerHTML = '';
+        retter.forEach((ret) => {
+          if (filter == ret.kategori || filter == 'alle') {
+            const klon = template.cloneNode(true);
+            klon.querySelector('.navn').textContent = ret.navn;
+            klon.querySelector('.pris').textContent = 'Pris:' + ret.pris;
+            klon.querySelector('.txt').textContent = ret.kortbeskrivelse;
+            klon.querySelector('img').src =
+              'medium/' + ret.billednavn + '-md.jpg';
+            main.appendChild(klon);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
