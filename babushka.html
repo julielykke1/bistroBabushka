@@ -27,6 +27,12 @@
     />
 
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       main {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -40,17 +46,16 @@
       }
 
       #first_section {
-        background-color: #8dc1ff;
-        display: flex;
-        align-items: center;
+        background-color: #8dc0ff8c;
         height: 70vh;
+        display: flex;
+        place-content: center;
       }
 
       /* Design af filter-knapper */
-      .valgt {
+      button:hover {
         background-color: #2142a6;
         color: white;
-        border: none;
       }
 
       /* Design af navigation */
@@ -60,7 +65,7 @@
 
       button {
         margin: 0.3rem;
-        margin-top: 1.8rem;
+        margin-top: 1rem;
         padding: 0.5rem 1.6rem;
         font-family: 'Quicksand', sans-serif;
         font-weight: 300;
@@ -73,7 +78,8 @@
       h1 {
         font-family: 'Oleo Script', cursive;
         text-align: center;
-        margin: 2rem;
+        margin: 1rem;
+        margin-bottom: 0.5rem;
         font-size: 3rem;
       }
       .navn {
@@ -87,7 +93,6 @@
         font-family: 'Quicksand', sans-serif;
         font-weight: 500;
         color: #212226;
-
         margin-bottom: 0.8rem;
       }
 
@@ -98,7 +103,8 @@
         color: #212226;
         margin: 0.5rem;
       }
-      .pris_2 {
+      .pris_2,
+      .oprind {
         font-family: 'Quicksand', sans-serif;
         font-weight: 300;
         font-size: 1.2rem;
@@ -162,6 +168,7 @@
     <aside id="modal">
       <article>
         <h2 class="navn_2"></h2>
+        <h3 class="oprind"></h3>
         <img src="" alt="" />
         <h3 class="pris_2"></h3>
         <p class="txt_2"></p>
@@ -258,6 +265,8 @@
       function visDetaljer(ret) {
         console.log(ret);
         modal.querySelector('.navn_2').textContent = ret.navn;
+        modal.querySelector('.oprind').textContent =
+          'Oprindelse: ' + ret.oprindelsesregion;
         modal.querySelector('img').src = 'medium/' + ret.billednavn + '-md.jpg';
         modal.querySelector('.pris_2').textContent = ret.pris + ' kr.';
         modal.querySelector('.txt_2').textContent = ret.langbeskrivelse;
